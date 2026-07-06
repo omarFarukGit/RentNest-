@@ -1,0 +1,32 @@
+
+model User {
+    id               String          @id @default(uuid())
+    name             String
+    email            String          @unique
+    password         String
+    role             Roles           @default(TENANT)
+    status           UserStatus      @default(ACTIVE)
+    phone            String?
+    avatar           String?
+    address          String?
+    reviews          Review[]
+    properties       Property[]
+    landlordRequests RentalRequest[] @relation("landlordRequests")  
+    tenantRequests   RentalRequest[] @relation("tenantRequests")   
+    createdAt        DateTime        @default(now())
+    updatedAt        DateTime        @updatedAt
+
+    @@map("users")
+}
+
+enum Roles{
+TENANT
+LANDLORD 
+ADMIN
+
+}
+
+enum UserStatus{
+    ACTIVE
+    BLOCKED
+}
