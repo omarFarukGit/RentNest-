@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { notFoundHandler } from "./middleware/not-found";
 import { globalErrorHandler } from "./middleware/global-error";
 import { userRoutes } from "./modules/user/user.routes";
+import { authRoutes } from "./modules/auth/auth.routes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req: Request, res: Response) => {
 
 // All Endpiends
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 //Not Found route handler
 app.use(notFoundHandler);
