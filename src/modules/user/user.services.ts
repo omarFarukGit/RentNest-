@@ -14,7 +14,7 @@ const registerIntroDB = async (payload: ICreateUserInput) => {
 
   const hashedPassword = await bcrypt.hash(
     password,
-    Number(config.bcrypt_salt),
+    Number(config.bcrypt_salt_rounds),
   );
 
   const createUser = await prisma.user.create({
@@ -37,6 +37,9 @@ const registerIntroDB = async (payload: ICreateUserInput) => {
   return user;
 };
 
+const getMyProfile = async () => {};
+
 export const userServices = {
   registerIntroDB,
+  getMyProfile,
 };

@@ -25,6 +25,10 @@ const loginUserFromDB = async (payload: ILogingPayload) => {
     throw new Error("Invaild creadintials");
   }
 
+  if (user.status === "BLOCKED") {
+    throw new Error("your account has been bloked. please contact support");
+  }
+
   const JwtPayload = {
     id: user.id,
     name: user.name,

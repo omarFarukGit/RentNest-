@@ -21,7 +21,18 @@ const register = catchAsync(
     });
   },
 );
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "get my profile successfully",
+      data: {},
+    });
+  },
+);
 
 export const userController = {
   register,
+  getMyProfile
 };
