@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { userServices } from "./user.services";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
+import { JwtPayload } from "jsonwebtoken";
 
 const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -23,16 +24,18 @@ const register = catchAsync(
 );
 const getMyProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.user;
+    const result = await userServices.getMyProfile(payload as JwtPayload);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "get my profile successfully",
-      data: {},
+      data: result,
     });
   },
 );
 
 export const userController = {
   register,
-  getMyProfile
+  getMyProfile,
 };

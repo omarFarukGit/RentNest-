@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { ICreateUserInput } from "./user.interface";
@@ -37,7 +38,24 @@ const registerIntroDB = async (payload: ICreateUserInput) => {
   return user;
 };
 
-const getMyProfile = async () => {};
+const getMyProfile = async (payload: JwtPayload) => {
+  const { name, email, role, id } = payload;
+
+  const user = await prisma.user.findUnique({
+    where: { email, name, role, id },
+    omit: { password: true },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.status === "BLOCKED") {
+    throw new Error("your account has been bloked. please contact support");
+  }
+
+  return user;
+};
 
 export const userServices = {
   registerIntroDB,
