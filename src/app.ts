@@ -11,7 +11,10 @@ import { adminRoutes } from "./modules/admin/admin.routes";
 import { reviewRoutes } from "./modules/review/review.routes";
 import { rentalRoutes } from "./modules/rental/rental.routes";
 
+
+
 const app = express();
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,6 +33,7 @@ app.use("/api/categories", CategoryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/rentals", rentalRoutes);
+
 
 //Not Found route handler
 app.use(notFoundHandler);
