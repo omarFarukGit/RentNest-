@@ -108,11 +108,94 @@ const adminDeleteProperty = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// =============================================
+// ✅ 7. সব রেন্টাল রিকোয়েস্ট দেখা (New)
+// =============================================
+const adminGetAllRentals = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+
+  const result = await adminServices.adminGetAllRentals(query);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "All rental requests fetched successfully",
+    data: result.data,
+    meta: result.pagination,
+  });
+});
+
+// =============================================
+// ✅ 8. সিঙ্গেল রেন্টাল রিকোয়েস্ট দেখা (New)
+// =============================================
+const adminGetSingleRental = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await adminServices.adminGetSingleRental(id as string);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Rental request fetched successfully",
+    data: result,
+  });
+});
+
+// =============================================
+// ✅ 9. রেন্টাল স্ট্যাটাস আপডেট (New)
+// =============================================
+const adminUpdateRentalStatus = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const payload = req.body;
+
+    const result = await adminServices.adminUpdateRentalStatus(
+      id as string,
+      payload,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: result.message,
+      data: result.rental,
+    });
+  },
+);
+
+// =============================================
+// ✅ 10. রেন্টাল রিকোয়েস্ট ডিলিট (New)
+// =============================================
+const adminDeleteRental = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await adminServices.adminDeleteRental(id as string);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: result.message,
+    data: result.deletedRental,
+  });
+});
+
+// =============================================
+// Export
+// =============================================
 export const adminControllers = {
+  // User
   getAllUsers,
   getSingleUser,
   updateUser,
+
+  // Property
   adminGetAllProperties,
   adminUpdateProperty,
   adminDeleteProperty,
+
+  // ✅ Rental (New)
+  adminGetAllRentals,
+  adminGetSingleRental,
+  adminUpdateRentalStatus,
+  adminDeleteRental,
 };

@@ -2,6 +2,13 @@
 import { prisma } from "../../lib/prisma";
 
 // =============================================
+// Helper: Decimal to Number
+// =============================================
+const toNumber = (value: any): number => {
+  return Number(value) || 0;
+};
+
+// =============================================
 // 1. সব ইউজার দেখা (Admin Only)
 // =============================================
 const getAllUsers = async (query: any) => {
@@ -57,8 +64,8 @@ const getAllUsers = async (query: any) => {
           select: {
             properties: true,
             reviews: true,
-            landlordRequests: true,  // ✅ সঠিক ফিল্ড
-            tenantRequests: true,    // ✅ সঠিক ফিল্ড
+            landlordRequests: true,
+            tenantRequests: true,
           },
         },
       },
@@ -89,7 +96,8 @@ const getAllUsers = async (query: any) => {
       totalReviews: user._count.reviews || 0,
       totalLandlordRequests: user._count.landlordRequests || 0,
       totalTenantRequests: user._count.tenantRequests || 0,
-      totalRequests: (user._count.landlordRequests || 0) + (user._count.tenantRequests || 0),
+      totalRequests:
+        (user._count.landlordRequests || 0) + (user._count.tenantRequests || 0),
     },
   }));
 
@@ -108,16 +116,8 @@ const getAllUsers = async (query: any) => {
 // 2. ইউজার আপডেট (Admin Only)
 // =============================================
 const updateUser = async (userId: string, payload: any) => {
-  const { 
-    name, 
-    email, 
-    phone, 
-    role, 
-    status, 
-    address, 
-    profileImage,
-    avatar 
-  } = payload;
+  const { name, email, phone, role, status, address, profileImage, avatar } =
+    payload;
 
   // ===== ইউজার আছে কিনা চেক =====
   const existingUser = await prisma.user.findUnique({
@@ -212,7 +212,7 @@ const getSingleUser = async (userId: string) => {
         },
         take: 5,
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
       },
       reviews: {
@@ -224,7 +224,7 @@ const getSingleUser = async (userId: string) => {
         },
         take: 5,
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
       },
     },
@@ -624,6 +624,374 @@ const adminDeleteProperty = async (propertyId: string) => {
   };
 };
 
+// =============================================
+// ✅ 7. সব রেন্টাল রিকোয়েস্ট দেখা (Admin Only) - NEW
+// =============================================
+const adminGetAllRentals = async (query: any) => {
+  const {
+    status,
+    propertyId,
+    tenantId,
+    landlordId,
+    startDate,
+    endDate,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+    limit = 10,
+    page = 1,
+  } = query;
+
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+  const where: any = {};
+
+  // ===== Filters =====
+  if (status) {
+    where.status = status;
+  }
+
+  if (propertyId) {
+    where.propertyId = propertyId;
+  }
+
+  if (tenantId) {
+    where.tenantId = tenantId;
+  }
+
+  if (landlordId) {
+    where.landlordId = landlordId;
+  }
+
+  if (startDate) {
+    where.startDate = { gte: new Date(startDate) };
+  }
+
+  if (endDate) {
+    where.endDate = { lte: new Date(endDate) };
+  }
+
+  // ===== Get Rental Requests =====
+  const [rentals, total] = await Promise.all([
+    prisma.rentalRequest.findMany({
+      where,
+      include: {
+        property: {
+          select: {
+            id: true,
+            title: true,
+            location: true,
+            price: true,
+            images: true,
+            availability: true,
+          },
+        },
+        tenant: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            profileImage: true,
+          },
+        },
+        landlord: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            profileImage: true,
+          },
+        },
+        payment: {
+          select: {
+            id: true,
+            amount: true,
+            status: true,
+            provider: true,
+            createdAt: true,
+          },
+        },
+      },
+      skip,
+      take: parseInt(limit),
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+    }),
+    prisma.rentalRequest.count({ where }),
+  ]);
+
+  // ===== Statistics =====
+  const stats = await prisma.rentalRequest.aggregate({
+    where,
+    _count: {
+      id: true,
+    },
+  });
+
+  const statusStats = await prisma.rentalRequest.groupBy({
+    by: ["status"],
+    where,
+    _count: {
+      status: true,
+    },
+  });
+
+  // ===== Format Response =====
+  const formattedRentals = rentals.map((rental) => ({
+    id: rental.id,
+    property: rental.property,
+    tenant: rental.tenant,
+    landlord: rental.landlord,
+    status: rental.status,
+    message: rental.message,
+    startDate: rental.startDate,
+    endDate: rental.endDate,
+    payment: rental.payment
+      ? {
+          ...rental.payment,
+          amount: toNumber(rental.payment.amount),
+        }
+      : null,
+    createdAt: rental.createdAt,
+    updatedAt: rental.updatedAt,
+  }));
+
+  return {
+    data: formattedRentals,
+    stats: {
+      total: stats._count.id || 0,
+      byStatus: statusStats.map((item) => ({
+        status: item.status,
+        count: item._count.status,
+      })),
+    },
+    pagination: {
+      total,
+      page: parseInt(page),
+      limit: parseInt(limit),
+      totalPages: Math.ceil(total / parseInt(limit)),
+    },
+  };
+};
+
+// =============================================
+// ✅ 8. সিঙ্গেল রেন্টাল রিকোয়েস্ট দেখা (Admin Only) - NEW
+// =============================================
+const adminGetSingleRental = async (rentalId: string) => {
+  const rental = await prisma.rentalRequest.findUnique({
+    where: { id: rentalId },
+    include: {
+      property: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          location: true,
+          price: true,
+          images: true,
+          bedrooms: true,
+          bathrooms: true,
+          size: true,
+          amenities: true,
+          availability: true,
+          landlordId: true,
+        },
+      },
+      tenant: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          profileImage: true,
+          address: true,
+          createdAt: true,
+        },
+      },
+      landlord: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          profileImage: true,
+          address: true,
+          createdAt: true,
+        },
+      },
+      payment: {
+        select: {
+          id: true,
+          amount: true,
+          provider: true,
+          transactionId: true,
+          status: true,
+          paymentDetails: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+  });
+
+  if (!rental) {
+    throw new Error("Rental request not found");
+  }
+
+  return {
+    ...rental,
+    payment: rental.payment
+      ? {
+          ...rental.payment,
+          amount: toNumber(rental.payment.amount),
+        }
+      : null,
+  };
+};
+
+// =============================================
+// ✅ 9. রেন্টাল স্ট্যাটাস আপডেট (Admin Only) - NEW
+// =============================================
+const adminUpdateRentalStatus = async (rentalId: string, payload: any) => {
+  const { status } = payload;
+
+  if (!status) {
+    throw new Error("Status is required");
+  }
+
+  const validStatuses = ["PENDING", "APPROVED", "REJECTED", "CANCELLED"];
+  if (!validStatuses.includes(status)) {
+    throw new Error(
+      `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+    );
+  }
+
+  // ===== Check if rental exists =====
+  const rental = await prisma.rentalRequest.findUnique({
+    where: { id: rentalId },
+    include: {
+      property: {
+        select: {
+          id: true,
+          title: true,
+          availability: true,
+          landlordId: true,
+        },
+      },
+    },
+  });
+
+  if (!rental) {
+    throw new Error("Rental request not found");
+  }
+
+  // ===== Update rental status =====
+  const updatedRental = await prisma.rentalRequest.update({
+    where: { id: rentalId },
+    data: { status },
+    include: {
+      property: {
+        select: {
+          id: true,
+          title: true,
+          location: true,
+          price: true,
+          availability: true,
+        },
+      },
+      tenant: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      landlord: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+    },
+  });
+
+  // ===== If approved, update property availability =====
+  if (status === "APPROVED") {
+    await prisma.property.update({
+      where: { id: rental.propertyId },
+      data: { availability: "RENTED" },
+    });
+  }
+
+  // ===== If rejected or cancelled, update property availability =====
+  if (status === "REJECTED" || status === "CANCELLED") {
+    const otherApproved = await prisma.rentalRequest.findFirst({
+      where: {
+        propertyId: rental.propertyId,
+        id: { not: rentalId },
+        status: "APPROVED",
+      },
+    });
+
+    if (!otherApproved) {
+      await prisma.property.update({
+        where: { id: rental.propertyId },
+        data: { availability: "AVAILABLE" },
+      });
+    }
+  }
+
+  return {
+    message: `Rental request ${status.toLowerCase()} successfully by Admin`,
+    rental: updatedRental,
+  };
+};
+
+// =============================================
+// ✅ 10. রেন্টাল রিকোয়েস্ট ডিলিট (Admin Only) - NEW
+// =============================================
+const adminDeleteRental = async (rentalId: string) => {
+  // ===== Check if rental exists =====
+  const rental = await prisma.rentalRequest.findUnique({
+    where: { id: rentalId },
+    include: {
+      payment: true,
+    },
+  });
+
+  if (!rental) {
+    throw new Error("Rental request not found");
+  }
+
+  // ===== Check if payment exists =====
+  if (rental.payment) {
+    throw new Error("Cannot delete rental request with existing payment");
+  }
+
+  // ===== Delete rental =====
+  await prisma.rentalRequest.delete({
+    where: { id: rentalId },
+  });
+
+  return {
+    message: "Rental request deleted successfully by Admin",
+    deletedRental: {
+      id: rental.id,
+      propertyId: rental.propertyId,
+      tenantId: rental.tenantId,
+      landlordId: rental.landlordId,
+      status: rental.status,
+    },
+  };
+};
+
+// =============================================
+// Export
+// =============================================
 export const adminServices = {
   getAllUsers,
   getSingleUser,
@@ -631,4 +999,9 @@ export const adminServices = {
   adminGetAllProperties,
   adminUpdateProperty,
   adminDeleteProperty,
+  // ✅ New Rental Functions
+  adminGetAllRentals,
+  adminGetSingleRental,
+  adminUpdateRentalStatus,
+  adminDeleteRental,
 };
