@@ -1,12 +1,20 @@
+
+import { auth } from "../../middleware/auth";
+
+
 import { Router } from "express";
-import { categoryController } from "./category.controller";
+import { CategoryController } from "./category.controller";
 
 const router = Router();
 
-router.post("/", categoryController.createCategory);
+router.post("/", auth("ADMIN"), CategoryController.createCategory);
 
-// POST   /categories
-// PUT    /categories/:id
-// DELETE /categories/:id
+router.get("/", CategoryController.getAllCategories);
 
-export const categoryRoutes = router;
+router.get("/:id", CategoryController.getSingleCategory);
+
+router.put("/:id", auth("ADMIN"), CategoryController.updateCategory);
+
+router.delete("/:id", auth("ADMIN"), CategoryController.deleteCategory);
+
+export const CategoryRoutes = router;

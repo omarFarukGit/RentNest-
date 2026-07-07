@@ -6,7 +6,7 @@ import { globalErrorHandler } from "./middleware/global-error";
 import { userRoutes } from "./modules/user/user.routes";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { properityRoutes } from "./modules/property/property.routes";
-import { categoryRoutes } from "./modules/category/category.routes";
+import { CategoryRoutes } from "./modules/category/category.routes";
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", properityRoutes);
-app.use("/api/categories", categoryRoutes);
+app.use("/api/categories", CategoryRoutes);
 
 //Not Found route handler
 app.use(notFoundHandler);

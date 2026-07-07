@@ -1,21 +1,74 @@
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
-import httpStatus from "http-status";
+import { CategoryService } from "./category.service";
 import { sendResponse } from "../../utils/sendResponse";
-import { categoryServices } from "./category.service";
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body;
+  const result = await CategoryService.createCategoryIntoDB(req.body);
 
-  const result = await categoryServices.createCategory(payload);
   sendResponse(res, {
+    statusCode: 201,
     success: true,
-    statusCode: httpStatus.CREATED,
-    message: "User registaion successfully",
+    message: "Category created successfully",
     data: result,
   });
 });
 
-export const categoryController = {
+const getAllCategories = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.getAllCategoriesFromDB();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Categories retrieved successfully",
+    data: result,
+  });
+});
+
+const getSingleCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.getSingleCategoryFromDB(
+    req.params.id as string,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category retrieved successfully",
+    data: result,
+  });
+});
+
+const updateCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.updateCategoryIntoDB(
+    req.params.id as string,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category updated successfully",
+    data: result,
+  });
+});
+
+const deleteCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.deleteCategoryFromDB(
+    req.params.id as string,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category deleted successfully",
+    data: result,
+  });
+});
+
+export const CategoryController = {
   createCategory,
+  getAllCategories,
+  getSingleCategory,
+  updateCategory,
+  deleteCategory,
 };

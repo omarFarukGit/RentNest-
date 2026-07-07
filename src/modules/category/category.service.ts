@@ -1,33 +1,48 @@
-// src/modules/category/category.service.ts
-
 import { prisma } from "../../lib/prisma";
 
-const createCategory = async (payload: { name: string }) => {
-  // Validate that name is provided
-  if (!payload.name) {
-    throw new Error("Category name is required");
-  }
-
-  // Check if category with same name already exists
-  const existingCategory = await prisma.category.findUnique({
-    where: {
-      name: payload.name, // Make sure name is not undefined
-    },
+const createCategoryIntoDB = async (payload: { name: string }) => {
+  return await prisma.category.create({
+    data: payload,
   });
-
-  if (existingCategory) {
-    throw new Error(`Category with name "${payload.name}" already exists`);
-  }
-
-  const category = await prisma.category.create({
-    data: {
-      name: payload.name,
-    },
-  });
-
-  return category;
 };
 
-export const categoryServices = {
-  createCategory,
+const getAllCategoriesFromDB = async () => {
+  return await prisma.category.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const getSingleCategoryFromDB = async (id: string) => {
+  return await prisma.category.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+};
+
+const updateCategoryIntoDB = async (id: string, payload: { name?: string }) => {
+  return await prisma.category.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+};
+
+const deleteCategoryFromDB = async (id: string) => {
+  return await prisma.category.delete({
+    where: {
+      id,
+    },
+  });
+};
+
+export const CategoryService = {
+  createCategoryIntoDB,
+  getAllCategoriesFromDB,
+  getSingleCategoryFromDB,
+  updateCategoryIntoDB,
+  deleteCategoryFromDB,
 };
