@@ -4,6 +4,7 @@ model User {
     name             String
     email            String          @unique
     password         String
+     profileImage    String? 
     role             Roles           @default(TENANT)
     status           UserStatus      @default(ACTIVE)
     phone            String?

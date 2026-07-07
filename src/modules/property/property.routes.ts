@@ -1,33 +1,47 @@
 import { Router } from "express";
-import { properityController } from "./property.controller";
+
 import { auth } from "../../middleware/auth";
 import { Roles } from "../../../generated/prisma/enums";
+import { propertyControllers } from "./property.controller";
 
 const router = Router();
-router.get(
-  "/",
-  auth(Roles.LANDLORD),
-  properityController.getLandlordProperties,
-);
-router.get(
-  "/:id",
-  auth(Roles.LANDLORD),
-  properityController.getLandlordPropertiesById,
-);
+
 router.post(
   "/",
   auth(Roles.LANDLORD),
-  properityController.createLandlordProperties,
+  propertyControllers.createLandlordProperties,
 );
-router.patch(
-  "/:id",
+router.get(
+  "/landlord",
   auth(Roles.LANDLORD),
-  properityController.updateLandlordProperties,
-);
-router.delete(
-  "/:id",
-  auth(Roles.LANDLORD),
-  properityController.deleteLandlordProperties,
+  propertyControllers.getLandlordProperties,
 );
 
-export const properityRoutes = router;
+router.get("/", propertyControllers.getAllProperties);
+
+router.get("/:id", propertyControllers.getSingleProperty);
+
+router.get("/my-properties", auth(), propertyControllers.getLandlordProperties);
+
+// প্রপার্টি আপডেট
+router.patch(
+  "/:id",
+  auth(Roles.ADMIN, Roles.LANDLORD),
+  propertyControllers.updateProperty,
+);
+
+// প্রপার্টি ডিলিট
+router.delete(
+  "/:id",
+  auth(Roles.ADMIN, Roles.LANDLORD),
+  propertyControllers.deleteProperty,
+);
+
+// প্রপার্টি এভেইলেবিলিটি টগল
+router.patch(
+  "/:id/toggle-availability",
+  auth(),
+  propertyControllers.togglePropertyAvailability,
+);
+
+export const propertyRoutes = router;
