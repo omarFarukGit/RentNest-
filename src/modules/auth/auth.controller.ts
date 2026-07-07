@@ -8,7 +8,7 @@ const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
 
-    const { accessToken, refreshToken } =
+    const { loginUser, accessToken, refreshToken } =
       await authServies.loginUserFromDB(payload);
 
     res.cookie("accessToken", accessToken, {
@@ -29,6 +29,7 @@ const login = catchAsync(
       statusCode: httpStatus.OK,
       message: "user login successfully",
       data: {
+        user:loginUser,
         accessToken,
         refreshToken,
       },

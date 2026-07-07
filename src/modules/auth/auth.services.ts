@@ -47,7 +47,17 @@ const loginUserFromDB = async (payload: ILogingPayload) => {
     config.jwt_refresh_exprire_in as SignOptions,
   );
 
+  const loginUser = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    status: user.status,
+    createdAt: user.createdAt,
+  };
+
   return {
+    loginUser,
     accessToken,
     refreshToken,
   };

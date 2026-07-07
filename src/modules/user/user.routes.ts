@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/register", userController.register);
 router.get(
-  "/my-profile",
+  "/me",
   auth(Roles.ADMIN, Roles.LANDLORD, Roles.TENANT),
   userController.getMyProfile,
 );
