@@ -10,12 +10,11 @@ import { CategoryRoutes } from "./modules/category/category.routes";
 import { adminRoutes } from "./modules/admin/admin.routes";
 import { reviewRoutes } from "./modules/review/review.routes";
 import { rentalRoutes } from "./modules/rental/rental.routes";
-
-
+import { paymentRoutes } from "./modules/payment/payment.routes";
+import { webhookRoutes } from "./lib/webhook";
 
 const app = express();
-
-
+app.use("/api/webhooks", webhookRoutes);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -33,7 +32,7 @@ app.use("/api/categories", CategoryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/rentals", rentalRoutes);
-
+app.use("/api/payments", paymentRoutes);
 
 //Not Found route handler
 app.use(notFoundHandler);
