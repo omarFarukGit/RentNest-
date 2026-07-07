@@ -7,6 +7,7 @@ import { userRoutes } from "./modules/user/user.routes";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { propertyRoutes } from "./modules/property/property.routes";
 import { CategoryRoutes } from "./modules/category/category.routes";
+import { adminRoutes } from "./modules/admin/admin.routes";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/categories", CategoryRoutes);
+app.use("/api/admin", adminRoutes);
 
 //Not Found route handler
 app.use(notFoundHandler);
