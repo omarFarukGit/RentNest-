@@ -30,7 +30,7 @@ export const formatCurrency = (
 };
 
 export const getClientUrl = (): string => {
-  return config.client_url || "http://localhost:3000";
+  return config.client_url! || "http://localhost:3000";
 };
 
 // =============================================
@@ -81,8 +81,8 @@ export const stripeServices = {
         },
       ],
       mode: "payment",
-      success_url: `${clientUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${clientUrl}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${clientUrl}/payments/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${clientUrl}/payments/cancel?session_id={CHECKOUT_SESSION_ID}`,
       metadata: {
         paymentId,
         rentalRequestId,

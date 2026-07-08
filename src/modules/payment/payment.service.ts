@@ -35,8 +35,8 @@ const createPayment = async (tenantId: string, payload: any) => {
   }
 
   // ===== CLIENT_URL Check =====
-  if (!process.env.CLIENT_URL) {
-    process.env.CLIENT_URL = "http://localhost:3000";
+  if (!config.client_url) {
+    config.client_url = "http://localhost:3000";
   }
 
   // ===== Rental Request Check =====
@@ -156,8 +156,8 @@ const createPayment = async (tenantId: string, payload: any) => {
           },
         ],
         mode: "payment",
-        success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${config.app_url}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${config.client_url}/payments/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${config.client_url}/payments/cancel?session_id={CHECKOUT_SESSION_ID}`,
         metadata: {
           paymentId: payment.id,
           rentalRequestId: payment.rentalRequestId,
@@ -570,7 +570,7 @@ const getMyPayments = async (userId: string, userRole: string, query: any) => {
     },
   });
 
-  const formattedPayments = payments.map((p:any) => ({
+  const formattedPayments = payments.map((p: any) => ({
     ...p,
     amount: toNumber(p.amount),
   }));

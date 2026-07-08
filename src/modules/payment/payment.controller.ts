@@ -57,7 +57,7 @@ const paymentSuccess = catchAsync(async (req: Request, res: Response) => {
   // ===== Check if redirect =====
   if (req.query.redirect === "true") {
     return res.redirect(
-      `${process.env.CLIENT_URL}/payment/success?payment_id=${result.data.payment.id}`,
+      `${process.env.CLIENT_URL}/payments/success?payment_id=${result.data.payment.id}`,
     );
   }
 
