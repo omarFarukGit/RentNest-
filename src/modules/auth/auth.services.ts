@@ -1,10 +1,11 @@
 
-import { prisma } from "../../lib/prisma";
-import { ILogingPayload } from "./auth.interface";
 import bcrypt from "bcryptjs";
-import { jwtUtils } from "../../utils/jwt";
-import config from "../../config";
+
 import { JwtPayload, SignOptions } from "jsonwebtoken";
+import { ILogingPayload } from "./auth.interface.js";
+import { prisma } from "../../lib/prisma.js";
+import { jwtUtils } from "../../utils/jwt.js";
+import config from "../../config/index.js";
 
 const loginUserFromDB = async (payload: ILogingPayload) => {
   const { email, password } = payload;

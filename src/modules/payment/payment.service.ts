@@ -1,8 +1,9 @@
 // src/modules/payment/payment.service.ts
-import config from "../../config";
-import { prisma } from "../../lib/prisma";
-import { stripe } from "../../lib/stripe";
-import { IPaymentServices } from "./payment.interface";
+
+import config from "../../config/index.js";
+import { prisma } from "../../lib/prisma.js";
+import { stripe } from "../../lib/stripe.js";
+import { IPaymentServices } from "./payment.interface.js";
 
 // =============================================
 // Helper: Decimal to Number
@@ -569,7 +570,7 @@ const getMyPayments = async (userId: string, userRole: string, query: any) => {
     },
   });
 
-  const formattedPayments = payments.map((p) => ({
+  const formattedPayments = payments.map((p:any) => ({
     ...p,
     amount: toNumber(p.amount),
   }));

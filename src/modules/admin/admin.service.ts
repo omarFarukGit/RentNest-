@@ -1,5 +1,6 @@
 // admin.service.ts
-import { prisma } from "../../lib/prisma";
+
+import { prisma } from "../../lib/prisma.js";
 
 // =============================================
 // Helper: Decimal to Number

@@ -1,10 +1,10 @@
-
-import { prisma } from "../../lib/prisma";
-
 // =============================================
 // 1. প্রপার্টি ক্রিয়েট (Landlord)
+
+import { prisma } from "../../lib/prisma.js";
+
 // =============================================
-const createLandlordProperties = async (landlordId: string, payload:any ) => {
+const createLandlordProperties = async (landlordId: string, payload: any) => {
   const {
     title,
     description,
@@ -185,7 +185,7 @@ const getAllProperties = async (query: any) => {
     prisma.property.count({ where }),
   ]);
 
-  const propertiesWithRating = properties.map((property:any) => {
+  const propertiesWithRating = properties.map((property: any) => {
     const reviews = property.reviews || [];
     const totalRating = reviews.reduce(
       (sum: number, r: any) => sum + r.rating,
@@ -574,7 +574,7 @@ const getLandlordProperties = async (landlordId: string, query: any) => {
     prisma.property.count({ where }),
   ]);
 
-  const propertiesWithStats = properties.map((property) => {
+  const propertiesWithStats = properties.map((property: any) => {
     const reviews = property.reviews || [];
     const avgRating =
       reviews.length > 0

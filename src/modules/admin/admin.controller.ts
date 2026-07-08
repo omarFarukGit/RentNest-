@@ -1,10 +1,9 @@
 // admin.controller.ts
 import { Request, Response } from "express";
-import { adminServices } from "./admin.service";
-
 import httpStatus from "http-status";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { adminServices } from "./admin.service.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 
 // =============================================
 // 1. সব ইউজার দেখা

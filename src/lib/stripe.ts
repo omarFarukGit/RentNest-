@@ -1,7 +1,7 @@
 // src/lib/stripe.ts
 import Stripe from "stripe";
-import { prisma } from "./prisma";
-import config from "../config";
+import { prisma } from "./prisma.js";
+import config from "../config/index.js";
 
 // =============================================
 // ✅ Stripe Instance

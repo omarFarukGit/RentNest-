@@ -1,5 +1,5 @@
 // rental.service.ts
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
 // =============================================
 // 1. রেন্টাল রিকোয়েস্ট তৈরি (Tenant Only)

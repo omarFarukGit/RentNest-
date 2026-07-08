@@ -1,11 +1,12 @@
 // src/modules/payment/payment.controller.ts
 import { Request, Response } from "express";
-import { paymentServices } from "./payment.service";
+import { paymentServices } from "./payment.service.js";
 
 import httpStatus from "http-status";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
-import config from "../../config";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { sendResponse } from "../../utils/sendResponse.js";
+import config from "../../config/index.js";
+
 
 // =============================================
 // 1. Create Payment

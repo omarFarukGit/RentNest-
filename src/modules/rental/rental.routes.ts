@@ -1,8 +1,9 @@
 // rental.routes.ts
 import express from "express";
-import { rentalControllers } from "./rental.controller";
-import { auth } from "../../middleware/auth";
-import { Roles } from "../../../generated/prisma/enums";
+import { rentalControllers } from "./rental.controller.js";
+import { auth } from "../../middleware/auth.js";
+import { Roles } from "../../generated/prisma/enums.js";
+
 
 const router = express.Router();
 

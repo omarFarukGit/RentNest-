@@ -1,10 +1,10 @@
 // rental.controller.ts
 import { Request, Response } from "express";
-import { rentalServices } from "./rental.service";
+import { rentalServices } from "./rental.service.js";
 
 import httpStatus from "http-status";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 
 // =============================================
 // 1. রেন্টাল রিকোয়েস্ট তৈরি

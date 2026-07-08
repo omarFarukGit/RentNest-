@@ -1,10 +1,10 @@
 // review.controller.ts
 import { Request, Response } from "express";
-import { reviewServices } from "./review.service";
+import { reviewServices } from "./review.service.js";
 
 import httpStatus from "http-status";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 
 // =============================================
 // 1. রিভিউ তৈরি

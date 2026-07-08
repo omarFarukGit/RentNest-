@@ -1,9 +1,11 @@
 // review.routes.ts
 import express from "express";
-import { reviewControllers } from "./review.controller";
+import { reviewControllers } from "./review.controller.js";
 
-import { Roles } from "../../../generated/prisma/enums";
-import { auth } from "../../middleware/auth";
+
+import { auth } from "../../middleware/auth.js";
+import { Roles } from "../../generated/prisma/enums.js";
+
 
 const router = express.Router();
 

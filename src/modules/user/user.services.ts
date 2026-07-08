@@ -1,8 +1,9 @@
 import { JwtPayload } from "jsonwebtoken";
-import config from "../../config";
-import { prisma } from "../../lib/prisma";
-import { ICreateUserInput } from "./user.interface";
+
 import bcrypt from "bcryptjs";
+import { ICreateUserInput } from "./user.interface.js";
+import { prisma } from "../../lib/prisma.js";
+import config from "../../config/index.js";
 
 const registerIntroDB = async (payload: ICreateUserInput) => {
   const { name, email, password, phone, address, role } = payload;

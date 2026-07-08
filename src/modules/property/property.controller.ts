@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync.js";
+
 import httpStatus from "http-status";
-import { propertyServices } from "./property.service";
+import { propertyServices } from "./property.service.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 
 const createLandlordProperties = catchAsync(
   async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { catchAsync } from "../../utils/catchAsync";
-import { userServices } from "./user.services";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { userServices } from "./user.services.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 import httpStatus from "http-status";
 import { JwtPayload } from "jsonwebtoken";
 

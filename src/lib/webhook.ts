@@ -1,7 +1,8 @@
 // src/modules/webhook/webhook.routes.ts
 import express from "express";
-import { stripe, stripeServices } from "./stripe";
-import config from "../config";
+import { stripe, stripeServices } from "./stripe.js";
+import config from "../config/index.js";
+
 
 const router = express.Router();
 

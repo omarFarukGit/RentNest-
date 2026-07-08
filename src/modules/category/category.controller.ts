@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../utils/catchAsync";
-import { CategoryService } from "./category.service";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { CategoryService } from "./category.service.js";
+import { sendResponse } from "../../utils/sendResponse.js";
+
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
   const result = await CategoryService.createCategoryIntoDB(req.body);

@@ -1,0 +1,109 @@
+import { catchAsync } from "../../utils/catchAsync.js";
+import httpStatus from "http-status";
+import { propertyServices } from "./property.service.js";
+import { sendResponse } from "../../utils/sendResponse.js";
+const createLandlordProperties = catchAsync(async (req, res) => {
+    const landlordId = req.user?.id;
+    const payload = req.body;
+    const result = await propertyServices.createLandlordProperties(landlordId, payload);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "User registaion successfully",
+        data: result,
+    });
+});
+const getAllProperties = catchAsync(async (req, res) => {
+    const query = req.query;
+    const result = await propertyServices.getAllProperties(query);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Properties fetched successfully",
+        data: result.data,
+        meta: result.pagination,
+    });
+});
+// =============================================
+// 2. সিঙ্গেল প্রপার্টি
+// =============================================
+const getSingleProperty = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const result = await propertyServices.getSingleProperty(id);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Property fetched successfully",
+        data: result,
+    });
+});
+// =============================================
+// 3. প্রপার্টি আপডেট
+// =============================================
+const updateProperty = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    const userRole = req.user?.role;
+    const payload = req.body;
+    const result = await propertyServices.updateProperty(id, userId, userRole, payload);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: result.message,
+        data: result.property,
+    });
+});
+// =============================================
+// 4. প্রপার্টি ডিলিট admin ownwer
+// =============================================
+const deleteProperty = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    const userRole = req.user?.role;
+    const result = await propertyServices.deleteProperty(id, userId, userRole);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: result.message,
+        data: result.deletedProperty,
+    });
+});
+// =============================================
+// 5. ল্যান্ডলর্ডের সব প্রপার্টি
+// =============================================
+const getLandlordProperties = catchAsync(async (req, res) => {
+    const landlordId = req.user?.id; // অথেন্টিকেশন থেকে
+    const query = req.query;
+    const result = await propertyServices.getLandlordProperties(landlordId, query);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Your properties fetched successfully",
+        data: result.data,
+        meta: result.pagination,
+    });
+});
+// =============================================
+// 6. প্রপার্টি এভেইলেবিলিটি টগল
+// =============================================
+const togglePropertyAvailability = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const landlordId = req.user?.id; // অথেন্টিকেশন থেকে
+    const result = await propertyServices.togglePropertyAvailability(id, landlordId);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: result.message,
+        data: result.property,
+    });
+});
+export const propertyControllers = {
+    getAllProperties,
+    getSingleProperty,
+    updateProperty,
+    deleteProperty,
+    getLandlordProperties,
+    togglePropertyAvailability,
+    createLandlordProperties,
+};
+//# sourceMappingURL=property.controller.js.map

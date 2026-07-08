@@ -1,17 +1,18 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { notFoundHandler } from "./middleware/not-found";
-import { globalErrorHandler } from "./middleware/global-error";
-import { userRoutes } from "./modules/user/user.routes";
-import { authRoutes } from "./modules/auth/auth.routes";
-import { propertyRoutes } from "./modules/property/property.routes";
-import { CategoryRoutes } from "./modules/category/category.routes";
-import { adminRoutes } from "./modules/admin/admin.routes";
-import { reviewRoutes } from "./modules/review/review.routes";
-import { rentalRoutes } from "./modules/rental/rental.routes";
-import { paymentRoutes } from "./modules/payment/payment.routes";
-import { webhookRoutes } from "./lib/webhook";
+import { webhookRoutes } from "./lib/webhook.js";
+import { userRoutes } from "./modules/user/user.routes.js";
+import { authRoutes } from "./modules/auth/auth.routes.js";
+import { propertyRoutes } from "./modules/property/property.routes.js";
+import { CategoryRoutes } from "./modules/category/category.routes.js";
+import { adminRoutes } from "./modules/admin/admin.routes.js";
+import { reviewRoutes } from "./modules/review/review.routes.js";
+import { rentalRoutes } from "./modules/rental/rental.routes.js";
+import { paymentRoutes } from "./modules/payment/payment.routes.js";
+import { notFoundHandler } from "./middleware/not-found.js";
+import { globalErrorHandler } from "./middleware/global-error.js";
+
 
 const app = express();
 app.use("/api/webhooks", webhookRoutes);

@@ -1,8 +1,8 @@
 // src/modules/admin/admin.routes.ts
 import express from "express";
-import { adminControllers } from "./admin.controller";
-import { auth } from "../../middleware/auth";
-import { Roles } from "../../../generated/prisma/enums";
+import { auth } from "../../middleware/auth.js";
+import { adminControllers } from "./admin.controller.js";
+import { Roles } from "../../generated/prisma/enums.js";
 
 const router = express.Router();
 

@@ -1,10 +1,9 @@
 // review.service.ts
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
 // =============================================
 // 1. রিভিউ তৈরি (Tenant Only)
 // =============================================
-
 
 const createReview = async (tenantId: string, payload: any) => {
   // ===== পেলোড চেক =====
@@ -45,18 +44,18 @@ const createReview = async (tenantId: string, payload: any) => {
     throw new Error("Property not found");
   }
 
-    // ===== ইউজার কি এই প্রপার্টি ভাড়া নিয়েছে চেক =====
-    const hasRented = await prisma.rentalRequest.findFirst({
-      where: {
-        propertyId,
-        tenantId,
-        status: "APPROVED",
-      },
-    });
+  // ===== ইউজার কি এই প্রপার্টি ভাড়া নিয়েছে চেক =====
+  const hasRented = await prisma.rentalRequest.findFirst({
+    where: {
+      propertyId,
+      tenantId,
+      status: "APPROVED",
+    },
+  });
 
-    if (!hasRented) {
-      throw new Error("You can only review properties you have rented");
-    }
+  if (!hasRented) {
+    throw new Error("You can only review properties you have rented");
+  }
 
   // ===== ইতিমধ্যে রিভিউ দিয়েছে কিনা চেক =====
   const existingReview = await prisma.review.findFirst({
@@ -183,7 +182,7 @@ const getPropertyReviews = async (propertyId: string, query: any) => {
     },
   });
 
-  const totalRating = allReviews.reduce((sum:number, r) => sum + r.rating, 0);
+  const totalRating = allReviews.reduce((sum: number, r:any) => sum + r.rating, 0);
   const averageRating =
     allReviews.length > 0 ? totalRating / allReviews.length : 0;
 
@@ -196,7 +195,7 @@ const getPropertyReviews = async (propertyId: string, query: any) => {
     5: 0,
   };
 
-  allReviews.forEach((review:any) => {
+  allReviews.forEach((review: any) => {
     if (review.rating >= 1 && review.rating <= 5) {
       ratingDistribution[review.rating as keyof typeof ratingDistribution]++;
     }
@@ -216,7 +215,7 @@ const getPropertyReviews = async (propertyId: string, query: any) => {
       averageRating: Number(averageRating.toFixed(1)),
       ratingDistribution,
     },
-    reviews: reviews.map((review) => ({
+    reviews: reviews.map((review:any) => ({
       id: review.id,
       rating: review.rating,
       comment: review.comment,
@@ -474,7 +473,7 @@ const getPropertyRatingStats = async (propertyId: string) => {
   });
 
   const totalReviews = reviews.length;
-  const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
+  const totalRating = reviews.reduce((sum: number, r:any) => sum + r.rating, 0);
   const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0;
 
   // ===== রেটিং ডিস্ট্রিবিউশন =====
@@ -486,7 +485,7 @@ const getPropertyRatingStats = async (propertyId: string) => {
     5: 0,
   };
 
-  reviews.forEach((review:any) => {
+  reviews.forEach((review: any) => {
     if (review.rating >= 1 && review.rating <= 5) {
       ratingDistribution[review.rating as keyof typeof ratingDistribution]++;
     }

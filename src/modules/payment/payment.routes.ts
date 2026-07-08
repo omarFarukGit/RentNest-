@@ -1,8 +1,10 @@
 // src/modules/payment/payment.routes.ts
 import express from "express";
-import { paymentControllers } from "./payment.controller";
-import { auth } from "../../middleware/auth";
-import { Roles } from "../../../generated/prisma/enums";
+
+import { auth } from "../../middleware/auth.js";
+import { paymentControllers } from "./payment.controller.js";
+import { Roles } from "../../generated/prisma/enums.js";
+
 
 
 const router = express.Router();

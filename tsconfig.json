@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "rootDir": "./",
+    "rootDir": "./src",
     "outDir": "./dist",
     "module": "esnext",
-    "moduleResolution": "bundler",
     "target": "es2023",
     "types": ["node"],
     "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    "declaration": false,
+    "declarationMap": false,
     "noUncheckedIndexedAccess": true,
     "strict": true,
     "isolatedModules": true,
@@ -16,6 +15,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "src/lib", "generated/**/*"],
+  "include": ["src"],
   "exclude": ["node_modules", "./dist"]
 }

@@ -1,4 +1,7 @@
-import { Roles, UserStatus } from "../../../generated/prisma/enums";
+
+import { Roles, UserStatus } from "../../generated/prisma/enums.js";
+
+
 
 export interface ICreateUserInput {
   name: string;
