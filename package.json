@@ -2,11 +2,11 @@
   "name": "rentnest",
   "version": "1.0.0",
   "description": "",
-  "main": "server",
+  "main": "server.js",
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
     "build": "tsc",
-    "postinstall": "prisma generate && prisma migrate deploy",
+    "postinstall": "prisma generate",
     "start": "node ./dist/server.js",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/api/webhooks/stripe-webhook"
   },
