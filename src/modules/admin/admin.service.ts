@@ -79,7 +79,7 @@ const getAllUsers = async (query: any) => {
   ]);
 
   // ===== ডেটা ফরম্যাট =====
-  const formattedUsers = users.map((user) => ({
+  const formattedUsers = users.map((user:any) => ({
     id: user.id,
     name: user.name,
     email: user.email,
@@ -397,7 +397,7 @@ const adminGetAllProperties = async (query: any) => {
   ]);
 
   // ===== রেটিং ক্যালকুলেশন =====
-  const propertiesWithRating = properties.map((property) => {
+  const propertiesWithRating = properties.map((property:any) => {
     const reviews = property.reviews || [];
     const totalRating = reviews.reduce(
       (sum: number, r: any) => sum + r.rating,
@@ -738,7 +738,7 @@ const adminGetAllRentals = async (query: any) => {
   });
 
   // ===== Format Response =====
-  const formattedRentals = rentals.map((rental) => ({
+  const formattedRentals = rentals.map((rental:any) => ({
     id: rental.id,
     property: rental.property,
     tenant: rental.tenant,
@@ -761,7 +761,7 @@ const adminGetAllRentals = async (query: any) => {
     data: formattedRentals,
     stats: {
       total: stats._count.id || 0,
-      byStatus: statusStats.map((item) => ({
+      byStatus: statusStats.map((item:any) => ({
         status: item.status,
         count: item._count.status,
       })),

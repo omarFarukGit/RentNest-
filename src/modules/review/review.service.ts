@@ -4,6 +4,8 @@ import { prisma } from "../../lib/prisma";
 // =============================================
 // 1. রিভিউ তৈরি (Tenant Only)
 // =============================================
+
+
 const createReview = async (tenantId: string, payload: any) => {
   // ===== পেলোড চেক =====
   if (!payload) {
@@ -181,7 +183,7 @@ const getPropertyReviews = async (propertyId: string, query: any) => {
     },
   });
 
-  const totalRating = allReviews.reduce((sum, r) => sum + r.rating, 0);
+  const totalRating = allReviews.reduce((sum:number, r) => sum + r.rating, 0);
   const averageRating =
     allReviews.length > 0 ? totalRating / allReviews.length : 0;
 
@@ -194,7 +196,7 @@ const getPropertyReviews = async (propertyId: string, query: any) => {
     5: 0,
   };
 
-  allReviews.forEach((review) => {
+  allReviews.forEach((review:any) => {
     if (review.rating >= 1 && review.rating <= 5) {
       ratingDistribution[review.rating as keyof typeof ratingDistribution]++;
     }
@@ -484,7 +486,7 @@ const getPropertyRatingStats = async (propertyId: string) => {
     5: 0,
   };
 
-  reviews.forEach((review) => {
+  reviews.forEach((review:any) => {
     if (review.rating >= 1 && review.rating <= 5) {
       ratingDistribution[review.rating as keyof typeof ratingDistribution]++;
     }
