@@ -43,18 +43,18 @@ const createReview = async (tenantId: string, payload: any) => {
     throw new Error("Property not found");
   }
 
-  //   // ===== ইউজার কি এই প্রপার্টি ভাড়া নিয়েছে চেক =====
-  //   const hasRented = await prisma.rentalRequest.findFirst({
-  //     where: {
-  //       propertyId,
-  //       tenantId,
-  //       status: "APPROVED",
-  //     },
-  //   });
+    // ===== ইউজার কি এই প্রপার্টি ভাড়া নিয়েছে চেক =====
+    const hasRented = await prisma.rentalRequest.findFirst({
+      where: {
+        propertyId,
+        tenantId,
+        status: "APPROVED",
+      },
+    });
 
-  //   if (!hasRented) {
-  //     throw new Error("You can only review properties you have rented");
-  //   }
+    if (!hasRented) {
+      throw new Error("You can only review properties you have rented");
+    }
 
   // ===== ইতিমধ্যে রিভিউ দিয়েছে কিনা চেক =====
   const existingReview = await prisma.review.findFirst({

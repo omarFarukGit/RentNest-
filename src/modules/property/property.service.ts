@@ -1,6 +1,5 @@
-import { Property } from "../../../generated/prisma/client";
+
 import { prisma } from "../../lib/prisma";
-import { ICreateProperty } from "./property.interface";
 
 // =============================================
 // 1. প্রপার্টি ক্রিয়েট (Landlord)
@@ -186,7 +185,7 @@ const getAllProperties = async (query: any) => {
     prisma.property.count({ where }),
   ]);
 
-  const propertiesWithRating = properties.map((property) => {
+  const propertiesWithRating = properties.map((property:any) => {
     const reviews = property.reviews || [];
     const totalRating = reviews.reduce(
       (sum: number, r: any) => sum + r.rating,
