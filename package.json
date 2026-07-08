@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
-    "build": "tsup",
+    "build": "tsc",
     "start": "node ./dist/server.js",
     "postinstall": "prisma generate && prisma migrate deploy",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/api/webhooks/stripe-webhook"
