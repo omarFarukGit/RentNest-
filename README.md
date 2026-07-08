@@ -6,11 +6,12 @@ RentNest simplifies the rental process by connecting **Tenants**, **Landlords**,
 
 ---
 
-## 🔗 Live Links
+## 🔗 Live Linksy
 
 * **Backend API:** `https://your-backend-url.vercel.app`
-* **API Documentation:** `https://your-backend-url.vercel.app/api-docs`
+* **API Documentation:** [API Documentation](./API_Documentation.md)
 * **Postman Collection:** [RentNest.postman_collection.json](./RentNest.postman_collection.json)
+* **Database Design ERD :** [RentNest ERD](https://drawsql.app/teams/omarfruk/diagrams/rentnest)
 
 ---
 
@@ -402,13 +403,13 @@ npm run prisma:migrate
 
 # 👨‍💻 Author
 
-**Muhammad Abu Hafz**
+**MD Omar faruk**
 
 Junior Full Stack Developer
 
-GitHub: https://github.com/your-username
+GitHub: https://github.com/oamrFarukGit
 
-LinkedIn: https://linkedin.com/in/your-profile
+LinkedIn: https://linkedin.com/in/omarfarukdev
 
 ---
 

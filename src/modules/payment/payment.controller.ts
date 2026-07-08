@@ -5,6 +5,7 @@ import { paymentServices } from "./payment.service";
 import httpStatus from "http-status";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
+import config from "../../config";
 
 // =============================================
 // 1. Create Payment
@@ -86,7 +87,7 @@ const paymentCancel = catchAsync(async (req: Request, res: Response) => {
   const result = await paymentServices.paymentCancel(session_id as string);
 
   if (req.query.redirect === "true") {
-    return res.redirect(`${process.env.CLIENT_URL}/payment/cancel`);
+    return res.redirect(`${config.client_url}/payment/cancel`);
   }
 
   sendResponse(res, {

@@ -1,52 +1,12 @@
 // src/lib/stripe.ts
 import Stripe from "stripe";
 import { prisma } from "./prisma";
-
-// =============================================
-// ✅ Validate Environment Variables
-// =============================================
-const validateStripeConfig = () => {
-  const errors: string[] = [];
-
-  if (!process.env.STRIPE_SECRET_KEY) {
-    errors.push("STRIPE_SECRET_KEY is missing");
-  }
-
-  if (!process.env.STRIPE_PUBLISHABLE_KEY) {
-    errors.push("STRIPE_PUBLISHABLE_KEY is missing");
-  }
-
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    errors.push("STRIPE_WEBHOOK_SECRET is missing");
-    console.warn(
-      "⚠️ STRIPE_WEBHOOK_SECRET is not set. Webhook verification will fail!",
-    );
-  }
-
-  if (errors.length > 0) {
-    console.error("❌ Stripe Configuration Errors:");
-    errors.forEach((error) => console.error(`  - ${error}`));
-    console.warn("⚠️ Please check your .env file.");
-  } else {
-    console.log("✅ Stripe configuration validated successfully");
-    console.log(
-      `  - STRIPE_SECRET_KEY: ${process.env.STRIPE_SECRET_KEY?.substring(0, 10)}...`,
-    );
-    console.log(
-      `  - STRIPE_PUBLISHABLE_KEY: ${process.env.STRIPE_PUBLISHABLE_KEY?.substring(0, 10)}...`,
-    );
-    console.log(
-      `  - STRIPE_WEBHOOK_SECRET: ${process.env.STRIPE_WEBHOOK_SECRET?.substring(0, 10)}...`,
-    );
-  }
-};
-
-validateStripeConfig();
+import config from "../config";
 
 // =============================================
 // ✅ Stripe Instance
 // =============================================
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const stripe = new Stripe(config.stripe_secret_key!);
 
 // =============================================
 // ✅ Helper Functions
@@ -70,7 +30,7 @@ export const formatCurrency = (
 };
 
 export const getClientUrl = (): string => {
-  return process.env.CLIENT_URL || "http://localhost:3000";
+  return config.client_url || "http://localhost:3000";
 };
 
 // =============================================
@@ -143,7 +103,7 @@ export const stripeServices = {
     return {
       sessionId: session.id,
       checkoutUrl: session.url,
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      publishableKey: config.stripe_publishable_key,
       session,
     };
   },
@@ -181,7 +141,7 @@ export const stripeServices = {
   // 5. ✅ Construct Webhook Event (FIXED)
   // =============================================
   constructWebhookEvent: (payload: Buffer, signature: string) => {
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const webhookSecret = config.stripe_webhook_secret;
 
     // ✅ Check if webhook secret exists
     if (!webhookSecret) {

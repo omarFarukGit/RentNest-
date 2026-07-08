@@ -1,6 +1,8 @@
 // src/modules/payment/payment.service.ts
+import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
+import { IPaymentServices } from "./payment.interface";
 
 // =============================================
 // Helper: Decimal to Number
@@ -153,8 +155,8 @@ const createPayment = async (tenantId: string, payload: any) => {
           },
         ],
         mode: "payment",
-        success_url: `${process.env.CLIENT_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.CLIENT_URL}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${config.app_url}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
         metadata: {
           paymentId: payment.id,
           rentalRequestId: payment.rentalRequestId,
@@ -640,7 +642,7 @@ const getPaymentStats = async (userId: string, userRole: string) => {
   };
 };
 
-export const paymentServices = {
+export const paymentServices: IPaymentServices = {
   createPayment,
   paymentSuccess,
   paymentCancel,

@@ -1,9 +1,11 @@
+import { Property } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
+import { ICreateProperty } from "./property.interface";
 
 // =============================================
 // 1. প্রপার্টি ক্রিয়েট (Landlord)
 // =============================================
-const createLandlordProperties = async (landlordId: string, payload: any) => {
+const createLandlordProperties = async (landlordId: string, payload:any ) => {
   const {
     title,
     description,

@@ -1,6 +1,7 @@
 // src/modules/webhook/webhook.routes.ts
 import express from "express";
 import { stripe, stripeServices } from "./stripe";
+import config from "../config";
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.post(
   express.raw({ type: "application/json" }),
   async (req, res) => {
     const sig = req.headers["stripe-signature"] as string;
-    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+    const endpointSecret = config.stripe_webhook_secret!;
 
     console.log("🔔 Webhook Received");
     console.log("📝 Signature:", sig);

@@ -39,12 +39,12 @@ const loginUserFromDB = async (payload: ILogingPayload) => {
   const accessToken = jwtUtils.createToken(
     JwtPayload,
     config.jwt_access_secret,
-    config.jwt_access_exprire_in as SignOptions,
+    config.jwt_access_expire_in as SignOptions,
   );
   const refreshToken = jwtUtils.createToken(
     JwtPayload,
     config.jwt_refresh_secret,
-    config.jwt_refresh_exprire_in as SignOptions,
+    config.jwt_access_expire_in as SignOptions,
   );
 
   const loginUser = {
@@ -98,7 +98,7 @@ const refreshToken = async (token: string) => {
   const accessToken = jwtUtils.createToken(
     JwtPayload,
     config.jwt_access_secret,
-    config.jwt_access_exprire_in as SignOptions,
+    config.jwt_access_expire_in as SignOptions,
   );
 
   return { accessToken };
