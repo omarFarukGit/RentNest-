@@ -18,7 +18,7 @@ const createLandlordProperties = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
-      message: "User registaion successfully",
+      message: "Create property  successfully",
       data: result,
     });
   },
